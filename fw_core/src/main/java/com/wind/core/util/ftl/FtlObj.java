@@ -1,7 +1,5 @@
 package com.wind.core.util.ftl;
 
-import java.util.Map;
-
 /**
  * @package com.wind.core.model.freemarker
  * @className FreeMarker
@@ -9,7 +7,7 @@ import java.util.Map;
  * @author wind
  * @date 2020/12/9 22:00
  */
-public class FreeMarker {
+public class FtlObj {
 
     /**
      * 模板文件目录
@@ -22,7 +20,7 @@ public class FreeMarker {
     /**
      * 数据
      */
-    private Object data;
+    private FtlParam data;
     /**
      * 生成文件目录
      */
@@ -64,11 +62,11 @@ public class FreeMarker {
         this.fileName = fileName;
     }
 
-    public Object getData() {
+    public FtlParam getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(FtlParam data) {
         this.data = data;
     }
 }

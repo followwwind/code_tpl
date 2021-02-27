@@ -2,7 +2,6 @@ package com.wind.core.util;
 
 import com.wind.core.callback.DbCallBack;
 import com.wind.core.common.BusinessCode;
-import com.wind.core.common.CommonConst;
 import com.wind.core.exception.BusinessException;
 import com.wind.core.model.JdbcProp;
 import com.wind.core.model.db.Column;
@@ -12,12 +11,10 @@ import com.wind.core.model.enums.DriverType;
 import com.wind.core.model.enums.MysqlType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 /**
  * @package com.wind.core.util
@@ -191,28 +188,29 @@ public class DbUtil {
                 table = new Table();
                 String tableName = rs.getString("TABLE_NAME");
                 table.setName(tableName);
-                table.setAlias(StringUtil.getCamelCase(tableName, true));
+                table.setAlias(StringUtil.getCamelCase(tableName, false));
+                table.setProperty(StringUtil.getCamelCase(tableName, true));
                 String catalog = rs.getString("TABLE_CAT");
                 table.setCatalog(catalog);
                 table.setRemarks(rs.getString("REMARKS"));
                 List<PrimaryKey> primaryList = getPrimaryKeys(db, catalog, tableName);
                 table.setPrimaryList(primaryList);
                 List<Column> columnList = getColumns(db, catalog, tableName);
+                columnList.forEach(c -> {
+                    c.setPrimary(primaryList.stream().anyMatch(p -> c.getName().equals(p.getName())));
+                });
                 table.setColumnList(columnList);
-                table.setImportList(columnList.stream().map(Column::getJavaType)
-                        .filter(r -> !r.contains("java.lang")).collect(Collectors.toList()));
                 if(!primaryList.isEmpty()){
                     PrimaryKey primaryKey = primaryList.get(0);
                     table.setPrimary(columnList.stream().filter(c -> primaryKey.getName().equals(c.getName())).findFirst().orElse(null));
                 }
+
             } catch (SQLException e) {
                 logger.error("DbUtil.getTable failed, err is {}", e.getMessage());
             }
         }
         return table;
     }
-
-
 
     /**
      * 获取数据库列信息
@@ -258,6 +256,7 @@ public class DbUtil {
                 column.setClassType(typeArr[typeArr.length - 1]);
             }
             column.setAlias(StringUtil.getCamelCase(colName, false));
+            column.setProperty(StringUtil.getCamelCase(colName, true));
             column.setColumnSize(rs.getInt("COLUMN_SIZE"));
             column.setNullable(rs.getInt("NULLABLE"));
             column.setRemarks(rs.getString("REMARKS"));

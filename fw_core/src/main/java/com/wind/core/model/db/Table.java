@@ -1,8 +1,9 @@
 package com.wind.core.model.db;
 
-import java.util.HashMap;
+import com.wind.core.util.ftl.FtlParam;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @package com.wind.core.model.db
@@ -11,7 +12,7 @@ import java.util.Map;
  * @author wind
  * @date 2020/12/9 19:54
  */
-public class Table{
+public class Table extends FtlParam {
 
     /**
      * 数据库实例名称
@@ -24,9 +25,14 @@ public class Table{
     private String name;
 
     /**
-     * 别名
+     * 别名(驼峰命名，首字母小写)
      */
     private String alias;
+
+    /**
+     * 别名(驼峰命名，首字母大写)
+     */
+    private String property;
 
     /**
      * 表注释
@@ -52,10 +58,9 @@ public class Table{
      */
     private Column primary;
 
-    private Map<String, Object> param;
-
     public Table() {
-        this.param = new HashMap<>(16);
+        super();
+        this.importList = new ArrayList<>();
     }
 
     public String getCatalog() {
@@ -122,20 +127,39 @@ public class Table{
         this.primary = primary;
     }
 
-    public Map<String, Object> getParam() {
-        return param;
+    public String getProperty() {
+        return property;
     }
 
-    public void setParam(Map<String, Object> param) {
-        this.param = param;
+    public void setProperty(String property) {
+        this.property = property;
     }
 
     /**
-     * 添加param
-     * @param key
-     * @param value
+     * 添加import语句
+     * @param importStr
      */
-    public void addParam(String key, String value){
-        this.param.put(key, value);
+    public void addImport(String importStr){
+        this.importList.add(importStr);
+    }
+
+    /**
+     * 添加import语句
+     * @param importList
+     */
+    public void addImport(List<String> importList){
+        this.importList.addAll(importList);
+    }
+
+    /**
+     * 初始化表字段对应的import
+     */
+    public void initImport(){
+        this.importList.clear();
+        if(this.columnList == null){
+            return;
+        }
+        addImport(this.columnList.stream().map(Column::getJavaType)
+                .filter(r -> !r.contains("java.lang")).distinct().collect(Collectors.toList()));
     }
 }

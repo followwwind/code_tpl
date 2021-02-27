@@ -67,6 +67,8 @@ public enum MysqlType {
     private final String type;
 
 
+
+
     MysqlType(String name, String type) {
         this.name = name;
         this.type = type;

@@ -1,5 +1,7 @@
 package com.wind.core.model.db;
 
+import java.io.Serializable;
+
 /**
  * @package com.wind.core.model.db
  * @className Column
@@ -7,7 +9,7 @@ package com.wind.core.model.db;
  * @author wind
  * @date 2020/12/9 19:51
  */
-public class Column {
+public class Column implements Serializable {
 
     /**
      * 列名称
@@ -15,12 +17,17 @@ public class Column {
     private String name;
 
     /**
-     * 别名
+     * 别名别名(驼峰命名，首字母小写)
      */
     private String alias;
 
     /**
-     * 类型
+     * 别名(驼峰命名，首字母大写)
+     */
+    private String property;
+
+    /**
+     * jdbc类型
      */
     private String type;
 
@@ -53,6 +60,11 @@ public class Column {
      * 描述
      */
     private String remarks;
+
+    /**
+     * 是否为主键
+     */
+    private boolean isPrimary;
 
     public String getName() {
         return name;
@@ -124,5 +136,21 @@ public class Column {
 
     public void setClassType(String classType) {
         this.classType = classType;
+    }
+
+    public boolean isPrimary() {
+        return isPrimary;
+    }
+
+    public void setPrimary(boolean primary) {
+        isPrimary = primary;
+    }
+
+    public String getProperty() {
+        return property;
+    }
+
+    public void setProperty(String property) {
+        this.property = property;
     }
 }

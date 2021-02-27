@@ -1,5 +1,7 @@
 package com.wind.core.model;
 
+import java.io.Serializable;
+
 /**
  * @package com.wind.core.model
  * @className JdbcProp
@@ -7,7 +9,7 @@ package com.wind.core.model;
  * @author wind
  * @date 2020/12/9 20:53
  */
-public class JdbcProp {
+public class JdbcProp implements Serializable {
 
     private String jdbcUrl;
 
