@@ -18,6 +18,7 @@ public class GenTest {
 
     @Before
     public void init(){
+        params.put("isEnglish", true);
         params.put("isPojo", true);
         params.put("isRest", false);
         params.put("isSwagger", true);
@@ -39,10 +40,10 @@ public class GenTest {
         List<Table> tableList = dbUtil.getTables("test");
         tableList.forEach(t -> {
             t.addParam(params);
-            genController(t);
-            genService(t);
-            genMapper(t);
-            genModel(t);
+//            genController(t);
+//            genService(t);
+//            genMapper(t);
+//            genModel(t);
             genAngularJs(t);
         });
     }

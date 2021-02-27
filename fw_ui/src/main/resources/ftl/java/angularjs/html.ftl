@@ -1,3 +1,4 @@
+<#assign isEnglish = param.isEnglish!false/>
 <div ng-controller="${property}Controller" class="wrapper-md">
   <div class="panel panel-default">
       <div class="panel-heading">
@@ -7,14 +8,14 @@
           <div class="row col-md-12">
             <form class="form-inline">
               <div class="form-group">
-                <label for="">名称:</label>
+                <label for="">${isEnglish?string('name', '名称')}:</label>
                 <input type="text" class="form-control"  placeholder="" ng-model="query.name">
               </div>
               <!-- <div class="form-group">
                 <label for="">Email</label>
                 <input type="email" class="form-control"  placeholder="">
               </div> -->
-              <button type="button" class="btn btn-success" ng-click="search()">搜索</button>
+              <button type="button" class="btn btn-success" ng-click="search()">${isEnglish?string('Search', '搜索')}</button>
             </form>
           </div>
       </div>
@@ -27,7 +28,7 @@
     <div class="panel-body">
       <div class="row">
           <div class="col-md-3">
-            <button class="btn btn-success" ng-click="add()">新增</button>
+            <button class="btn btn-success" ng-click="add()">${isEnglish?string('Add', '新增')}</button>
           </div>
       </div>
       <div class="row">
@@ -41,9 +42,9 @@
                   </label>
                 </th>
                 <#list columnList as column>
-                <th class="text-center">${column.remarks!column.alias}</th>
+                <th class="text-center">${(column.remarks == '' || isEnglish)?string(column.alias, column.remarks)}</th>
                 </#list>
-                <th class="text-center">操作</th>
+                <th class="text-center">${isEnglish?string('Operate', '操作')}</th>
               </tr>
               </thead>
               <tbody class="text-center">
@@ -65,17 +66,17 @@
                   <form class="form-horizontal">
                       <#list columnList as column>
                       <div class="form-group">
-                          <label class="col-sm-2 control-label">${(column.remarks != '')?string(column.remarks, column.alias)}:</label>
+                          <label class="col-sm-2 control-label">${(column.remarks == '' || isEnglish)?string(column.alias, column.remarks)}:</label>
                           <div class="col-sm-10">
-                              <input type="text" class="form-control" placeholder="" ng-model="form.${column.alias}">
+                              <input type="text" class="form-control" placeholder="" ng-model="form.${column.alias}" id="${column.alias}">
                           </div>
                       </div>
                       </#list>
                     </form>
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                  <button type="button" class="btn btn-primary" ng-click="save()">提交</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">${isEnglish?string('Close', '关闭')}</button>
+                  <button type="button" class="btn btn-primary" ng-click="save()">${isEnglish?string('Submit', '提交')}</button>
               </div>
           </div><!-- /.modal-content -->
       </div><!-- /.modal -->

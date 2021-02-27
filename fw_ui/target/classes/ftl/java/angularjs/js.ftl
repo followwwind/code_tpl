@@ -1,4 +1,5 @@
 <#assign isRest = param.isRest!true/>
+<#assign isEnglish = param.isEnglish!false/>
 'use strict'
 app.controller('${property}Controller', function($scope, $http, $timeout, time, obj, $stateParams) {
     
@@ -20,12 +21,12 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
 
     $scope.dialog = {
         "isAdd": true,
-        "title": '新增',
+        "title": "${isEnglish?string('Add', '新增')}",
     };
 
     $scope.body = {
-        "queryTitle": "查询条件",
-        "tableTitle": "数据列表"
+        "queryTitle": "${isEnglish?string('Query Condition', '查询条件')}",
+        "tableTitle": "${isEnglish?string('Data List', '数据列表')}"
     };
 
     $scope.returnData = {
@@ -37,6 +38,18 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
 
     var tbl;
     var layer = layui.layer;
+
+    <#list columnList as column>
+    <#if column.javaType == "java.util.Date" && !column.name?contains("create") && !column.name?contains("update")>
+    layui.laydate.render({
+        elem: '#${column.alias}',
+        type: 'datetime',
+        done: function(value, date){
+            $scope.form.${column.alias} = value;
+        }
+    });
+    </#if>
+    </#list>
 
     $timeout(function(){
         tbl = $('#tbl').DataTable({
@@ -53,11 +66,15 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
                     callback($scope.returnData);
                 }, 
                 function(err){
-                    layer.msg('数据加载请求异常', {icon: 5});
+                    layer.msg('${isEnglish?string('api service exception', '接口请求异常')}', {icon: 5});
                 });
             },
             "serverSide":true,
+            <#if isEnglish>
+            //"language":$scope.datatables_lang, //提示信息
+            <#else>
             "language":$scope.datatables_lang, //提示信息
+            </#if>
             "renderer": "bootstrap", //渲染样式：Bootstrap和jquery-ui
             "pagingType": "full_numbers", //分页样式：simple,simple_numbers,full,full_numbers
             "bFilter": true,
@@ -82,10 +99,8 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
                 </#list>
                 {
                     "render": function(data, type, row){
-                        var html = '<span class="btn btn-info btn-sm" name="edit">编辑</span>';
-                        if(row.type == 2){
-                            html += '<span class="btn btn-danger btn-sm" style="margin-left:3px;" name="del">删除</span>';
-                        }
+                        var html = '<span class="btn btn-info btn-sm" name="edit">${isEnglish?string('Edit', '修改')}</span>';
+                        html += '<span class="btn btn-danger btn-sm" style="margin-left:3px;" name="del">${isEnglish?string('Del', '删除')}</span>';
                         return html;
                     }
                 },
@@ -96,7 +111,7 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
     $('#tbl tbody').on('click', 'span[name="edit"]', function(e){
         var entity = tbl.row($(e.target).parents("tr")).data();
         $scope.dialog.isAdd = false;
-        $scope.dialog.title = '修改';
+        $scope.dialog.title = '${isEnglish?string('Edit', '修改')}';
         obj.copy(entity, $scope.form.entity);
         $scope.$apply();
         $("#add").modal("show");
@@ -107,33 +122,33 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
         <#if isRest>
         $http.delete($scope.serverUrl + "api/${alias}/" + entity.id, {}).then(function(response){
             if(response.data.code == 200){
-                layer.msg('删除成功', {icon: 1});
+                layer.msg('${isEnglish?string('Success', '删除成功')}', {icon: 1});
             }else{
                 layer.msg(response.data.msg, {icon: 5});
             }
             tbl.ajax.reload();
         },
         function(err){
-            layer.msg('接口请求异常', {icon: 5});
+            layer.msg('${isEnglish?string('api service exception', '接口请求异常')}', {icon: 5});
         });
         <#else>
         $http.get($scope.serverUrl + "api/${alias}/delete/" + entity.id, {}).then(function(response){
             if(response.data.code == 200){
-                layer.msg('删除成功', {icon: 1});
+                layer.msg('${isEnglish?string('Success', '删除成功')}', {icon: 1});
             }else{
                 layer.msg(response.data.msg, {icon: 5});
             }
             tbl.ajax.reload();
         },
         function(err){
-            layer.msg('接口请求异常', {icon: 5});
+            layer.msg('${isEnglish?string('api service exception', '接口请求异常')}', {icon: 5});
         });
         </#if>
     });
 
     $scope.add = function(){
         $scope.dialog.isAdd = true;
-        $scope.dialog.title = '新增';
+        $scope.dialog.title = '${isEnglish?string('Add', '新增')}';
         $scope.form = {};
         $("#add").modal("show");
     };
@@ -157,7 +172,7 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
         if($scope.dialog.isAdd){
             $http.post($scope.serverUrl + url, $scope.form).then(function(response){
                 if(response.data.code == 200){
-                    layer.msg('操作成功', {icon: 1});
+                    layer.msg('${isEnglish?string('success', '操作成功')}', {icon: 1});
                 }else{
                     layer.msg(response.data.msg, {icon: 5});
                 }
@@ -165,12 +180,12 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
                 $("#add").modal("hide");
             },
             function(err){
-                layer.msg('接口请求异常', {icon: 5});
+                layer.msg('${isEnglish?string('api service exception', '接口请求异常')}', {icon: 5});
             });
         }else{
             $http.put($scope.serverUrl + url, $scope.form).then(function(response){
                 if(response.data.code == 200){
-                    layer.msg('操作成功', {icon: 1});
+                    layer.msg('${isEnglish?string('success', '操作成功')}', {icon: 1});
                 }else{
                     layer.msg(response.data.msg, {icon: 5});
                 }
@@ -178,14 +193,14 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
                 $("#add").modal("hide");
             },
             function(err){
-                layer.msg('接口请求异常', {icon: 5});
+                layer.msg('${isEnglish?string('api service exception', '接口请求异常')}', {icon: 5});
             });
         }
         <#else>
         var url =  $scope.dialog.isAdd == 1 ? "api/${alias}/save" : "api/${alias}/update";
         $http.post($scope.serverUrl + url, $scope.form).then(function(response){
             if(response.data.code == 200){
-                layer.msg('操作成功', {icon: 1});
+                layer.msg('${isEnglish?string('success', '操作成功')}', {icon: 1});
             }else{
                 layer.msg(response.data.msg, {icon: 5});
             }
@@ -193,7 +208,7 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
             $("#add").modal("hide");
         },
         function(err){
-            layer.msg('接口请求异常', {icon: 5});
+            layer.msg('${isEnglish?string('api service exception', '接口请求异常')}', {icon: 5});
         });
         </#if>
     };
