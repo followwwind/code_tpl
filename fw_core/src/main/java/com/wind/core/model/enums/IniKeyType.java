@@ -28,6 +28,7 @@ public enum IniKeyType {
      */
     WORK_PATH("work", "path"),
     WORK_CLEAR("work", "isClear"),
+    WORK_TPL_PATH("work", "tplPath"),
     ;
 
     private final String type;

@@ -16,7 +16,7 @@ public class AppMain {
 
     public static void main(String[] args) throws IOException {
         ParseIni config = args.length == 1 ? new ParseIni(args[0]) :
-                ParseIni.getInstance("/config.properties");
+                ParseIni.getInstance("/app.ini");
         GenFactory tool = GenFactory.getInstance(config);
         tool.genCode();
     }

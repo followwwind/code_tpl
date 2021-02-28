@@ -33,9 +33,9 @@ public class MybatisTest {
         freeMarker.setData(table);
         freeMarker.setFileDir("C:\\Users\\follow\\Desktop\\tpl");
         freeMarker.setFileName(table.getAlias() + "Mapper.java");
-        FtlUtil.genCode(freeMarker);
+        FtlUtil.genCode(freeMarker, true);
         freeMarker.setCfgName("mapper.ftl");
         freeMarker.setFileName(table.getAlias() + "Mapper.xml");
-        FtlUtil.genCode(freeMarker);
+        FtlUtil.genCode(freeMarker, true);
     }
 }

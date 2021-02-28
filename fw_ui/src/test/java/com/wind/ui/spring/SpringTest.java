@@ -35,7 +35,7 @@ public class SpringTest {
         freeMarker.setData(table);
         freeMarker.setFileDir("C:\\Users\\follow\\Desktop\\tpl");
         freeMarker.setFileName(table.getAlias() + "Controller.java");
-        FtlUtil.genCode(freeMarker);
+        FtlUtil.genCode(freeMarker, true);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class SpringTest {
         freeMarker.setData(table);
         freeMarker.setFileDir("C:\\Users\\follow\\Desktop\\tpl");
         freeMarker.setFileName(table.getAlias() + "Service.java");
-        FtlUtil.genCode(freeMarker);
+        FtlUtil.genCode(freeMarker, true);
         table.addImport("com.wind.boot.common.message.JsonResult");
         table.addImport("com.baidu.unbiz.fluentvalidator.annotation.FluentValid");
         table.addImport("com.wind.boot.common.validation.group.Add");
@@ -64,6 +64,6 @@ public class SpringTest {
         table.addImport("com.wind.boot.common.persistence.Page");
         freeMarker.setCfgName("serviceImpl.ftl");
         freeMarker.setFileName(table.getAlias() + "ServiceImpl.java");
-        FtlUtil.genCode(freeMarker);
+        FtlUtil.genCode(freeMarker, true);
     }
 }

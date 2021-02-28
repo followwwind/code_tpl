@@ -33,7 +33,7 @@ public class JdbcTest {
         freeMarker.setData(table);
         freeMarker.setFileDir("C:\\Users\\follow\\Desktop\\tpl");
         freeMarker.setFileName(table.getProperty() + ".java");
-        FtlUtil.genCode(freeMarker);
+        FtlUtil.genCode(freeMarker, true);
     }
 
 
@@ -45,10 +45,10 @@ public class JdbcTest {
         freeMarker.setData(null);
         freeMarker.setFileDir("C:\\Users\\follow\\Desktop\\tpl");
         freeMarker.setFileName("DbUtil.java");
-        FtlUtil.genCode(freeMarker);
+        FtlUtil.genCode(freeMarker, true);
         freeMarker.setCfgName("page.ftl");
         freeMarker.setFileName("Page.java");
-        FtlUtil.genCode(freeMarker);
+        FtlUtil.genCode(freeMarker, true);
     }
 
     @Test
@@ -66,6 +66,6 @@ public class JdbcTest {
         freeMarker.setData(table);
         freeMarker.setFileDir("C:\\Users\\follow\\Desktop\\tpl");
         freeMarker.setFileName(table.getProperty() + "Dao.java");
-        FtlUtil.genCode(freeMarker);
+        FtlUtil.genCode(freeMarker, true);
     }
 }

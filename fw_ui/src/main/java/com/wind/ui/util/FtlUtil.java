@@ -27,8 +27,9 @@ public class FtlUtil {
     /**
      * 生成文件
      * @param freeMarker
+     * @param isDir true根据路径，false根据class
      */
-    public static void genCode(FtlObj freeMarker){
+    public static void genCode(FtlObj freeMarker, boolean isDir){
         try {
             File dir = new File(freeMarker.getFileDir());
             boolean sign = true;
@@ -37,7 +38,11 @@ public class FtlUtil {
             }
             if(sign){
                 Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
-                cfg.setClassForTemplateLoading(FtlUtil.class, "/ftl/");
+                if(isDir){
+                    cfg.setDirectoryForTemplateLoading(new File(freeMarker.getCfgDir()));
+                }else{
+                    cfg.setClassForTemplateLoading(FtlUtil.class, "/ftl/");
+                }
                 cfg.setDefaultEncoding("UTF-8");
                 cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
                 Template temp = cfg.getTemplate(freeMarker.getCfgName());
