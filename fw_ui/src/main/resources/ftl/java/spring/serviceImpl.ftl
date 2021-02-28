@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.github.pagehelper.PageHelper;
 import java.util.List;
+import ${bootName + ".util.BeanUtil"};
 import ${bootName + ".dao." + property + "Mapper"};
 import ${bootName + ".service." + property + "Service"};
 <#if isPojo>
@@ -24,6 +24,9 @@ import ${bootName + ".entity.dto." + property + "DTO"};
 import ${bootName + ".entity.dto." + property + "SearchDTO"};
 <#else>
 import ${bootName + ".entity." + property};
+</#if>
+<#if isFluentValid>
+import com.baidu.unbiz.fluentvalidator.annotation.FluentValid;
 </#if>
 
 /**
@@ -41,52 +44,38 @@ public class ${property}ServiceImpl implements ${property}Service{
     private ${property}Mapper mapper;
 
     @Override
-    public JsonResult save(${isFluentValid?string('@FluentValid(groups = Add.class) ', ' ')}${property}${isPojo?string('DTO','')} r) {
+    public int save(${isFluentValid?string('@FluentValid(groups = Add.class) ', ' ')}${property}${isPojo?string('DTO','')} r) {
     	logger.info("${property}ServiceImpl.save param: r is {}", r);
         ${property} entity = new ${property}();
         BeanUtil.copy(r, entity);
-        int i = mapper.insert(entity);
-        return new JsonResult(i > 0 ? HttpCode.OK : HttpCode.FAIL);
+        return mapper.insert(entity);
     }
 
     <#if primary??>
     @Override
-    public JsonResult delete(${primary.classType} id) {
+    public int delete(${primary.classType} id) {
     	logger.info("${property}ServiceImpl.delete param: id is {}", id);
-        int i = mapper.deleteById(id);
-        return new JsonResult(i > 0 ? HttpCode.OK : HttpCode.FAIL);
+        return mapper.deleteById(id);
     }
 
     @Override
-    public JsonResult get(${primary.classType} id) {
+    public ${property} get(${primary.classType} id) {
     	logger.info("${property}ServiceImpl.get param: id is {}", id);
-        ${property} r = mapper.findById(id);
-        return new JsonResult(HttpCode.OK, r);
+        return mapper.findById(id);
     }
 
     @Override
-    public JsonResult update(${isFluentValid?string('@FluentValid(groups = Update.class) ', ' ')}${property}${isPojo?string('DTO','')} r) {
+    public int update(${isFluentValid?string('@FluentValid(groups = Update.class) ', ' ')}${property}${isPojo?string('DTO','')} r) {
     	logger.info("${property}ServiceImpl.update param: r is {}", r);
         ${property} entity = new ${property}();
         BeanUtil.copy(r, entity);
-        int i = mapper.update(entity);
-        return new JsonResult(i > 0 ? HttpCode.OK : HttpCode.FAIL);
+        return mapper.update(entity);
     }
     </#if>
 
     @Override
-    public JsonResult list(${property}${isPojo?string('SearchDTO','')} r) {
+    public List<${property}${isPojo?string('VO','')}> list(${property}${isPojo?string('SearchDTO','')} r) {
     	logger.info("${property}ServiceImpl.list param: r is {}", r);
-        List<${property}${isPojo?string('VO','')}> list = mapper.list(r);
-        return new JsonResult(HttpCode.OK, list);
-    }
-
-    @Override
-    public JsonResult pageList(${property}${isPojo?string('SearchDTO','')} r){
-    	logger.info("${property}ServiceImpl.pageList param: r is {}", r);
-        PageHelper.startPage(r.getPageNumber(), r.getLineNumber());
-        List<${property}${isPojo?string('VO','')}> list = mapper.list(r);
-        Page<${property}${isPojo?string('VO','')}> page = new Page<>(list);
-        return new JsonResult(HttpCode.OK, page);
+        return mapper.list(r);
     }
 }

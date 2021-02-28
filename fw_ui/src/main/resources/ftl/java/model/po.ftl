@@ -1,5 +1,6 @@
 <#assign bootName = param.bootName!"com.wind"/>
 <#assign author = param.author!"wind"/>
+<#assign isExtendPojo = param.isExtendPojo!true/>
 package ${bootName + ".entity.po"};
 
 <#if importList??>
@@ -14,7 +15,7 @@ import ${import};
  * @date ${.now?string("yyyy/MM/dd HH:mm:ss")}
  * @version V1.0
  */
-public class ${property} extends BasePO {
+public class ${property}${isExtendPojo?string(' extends BasePO', '')} {
 
 <#if columnList??>
     <#list columnList as field>

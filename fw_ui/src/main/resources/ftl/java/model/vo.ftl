@@ -1,5 +1,6 @@
 <#assign bootName = param.bootName!"com.wind"/>
 <#assign author = param.author!"wind"/>
+<#assign isExtendPojo = param.isExtendPojo!true/>
 package ${bootName + ".entity.vo"};
 
 <#if importList??>
@@ -8,7 +9,7 @@ import ${import};
     </#list>
 </#if>
 <#if importList?? && importList?seq_contains("java.util.Date")>
-    import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 </#if>
 
 /**
@@ -17,7 +18,7 @@ import ${import};
  * @date ${.now?string("yyyy/MM/dd HH:mm:ss")}
  * @version V1.0
  */
-public class ${property}VO extends BaseVO {
+public class ${property}VO${isExtendPojo?string(' extends BaseVO', '')} {
 
 <#if columnList??>
     <#list columnList as field>

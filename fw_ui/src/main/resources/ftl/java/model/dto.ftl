@@ -1,5 +1,6 @@
 <#assign bootName = param.bootName!"com.wind"/>
 <#assign author = param.author!"wind"/>
+<#assign isExtendPojo = param.isExtendPojo!true/>
 package ${bootName + ".entity.dto"};
 
 <#if importList??>
@@ -17,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * @date ${.now?string("yyyy/MM/dd HH:mm:ss")}
  * @version V1.0
  */
-public class ${property}DTO extends BaseDTO {
+public class ${property}DTO${isExtendPojo?string(' extends BaseDTO', '')} {
 
 <#if columnList??>
     <#list columnList as field>

@@ -152,6 +152,13 @@ public class Table extends FtlParam {
     }
 
     /**
+     * clear import
+     */
+    public void clearImport(){
+        this.importList.clear();
+    }
+
+    /**
      * 初始化表字段对应的import
      */
     public void initImport(){

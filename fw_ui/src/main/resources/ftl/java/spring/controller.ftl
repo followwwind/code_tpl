@@ -14,8 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.github.pagehelper.PageHelper;
+import java.util.List;
 import ${bootName + ".service." + property + "Service"};
 <#if isPojo>
+import ${bootName + ".entity.po." + property};
+import ${bootName + ".entity.vo." + property + "VO"};
 import ${bootName + ".entity.dto." + property + "DTO"};
 import ${bootName + ".entity.dto." + property + "SearchDTO"};
 <#else>
@@ -54,7 +58,8 @@ public class ${property}Controller{
     <#if isSwagger>${"\t"}@ApiOperation(value="${property} 添加记录接口", notes="${property} 添加记录接口")")${"\n"}</#if><#t>
     public JsonResult save(@RequestBody ${property}${isPojo?string('DTO','')} r) {
         logger.info("${property}Controller.save param: r is {}", r);
-        return ${service}.save(r);
+        int i = ${service}.save(r);
+        return new JsonResult(i > 0 ? HttpCode.OK : HttpCode.FAIL);
     }
 
     <#if primary??>
@@ -71,7 +76,8 @@ public class ${property}Controller{
     <#if isSwagger>${"\t"}@ApiOperation(value="${property} 删除记录接口", notes="${property} 删除记录接口")${"\n"}</#if><#t>
     public JsonResult delete(@PathVariable("id") ${primary.classType} id) {
         logger.info("${property}Controller.delete param: id is {}", id);
-        return ${service}.delete(id);
+        int i = ${service}.delete(id);
+        return new JsonResult(i > 0 ? HttpCode.OK : HttpCode.FAIL);
     }
 
     /**
@@ -83,7 +89,8 @@ public class ${property}Controller{
     <#if isSwagger>${"\t"}@ApiOperation(value="${property} 单条记录查询接口", notes="${property} 单条记录查询接口")${"\n"}</#if><#t>
     public JsonResult get(@PathVariable("id") ${primary.classType} id) {
         logger.info("${property}Controller.get param: id is {}", id);
-        return ${service}.get(id);
+        ${property} entity = ${service}.get(id);
+        return new JsonResult(HttpCode.OK, entity);
     }
     </#if>
     /**
@@ -99,7 +106,8 @@ public class ${property}Controller{
     <#if isSwagger>${"\t"}@ApiOperation(value="${property} 修改记录接口", notes="${property} 修改记录接口")${"\n"}</#if><#t>
     public JsonResult update(@RequestBody ${property}${isPojo?string('DTO','')} r) {
         logger.info("${property}Controller.update param: r is {}", r);
-        return ${service}.update(r);
+        int i = ${service}.update(r);
+        return new JsonResult(i > 0 ? HttpCode.OK : HttpCode.FAIL);
     }
 
     /**
@@ -111,7 +119,8 @@ public class ${property}Controller{
     <#if isSwagger>${"\t"}@ApiOperation(value="${property} 批量查询记录接口", notes="${property} 批量查询记录接口")${"\n"}</#if><#t>
     public JsonResult list(@RequestBody ${property}${isPojo?string('SearchDTO','')} r) {
         logger.info("${property}Controller.list param: r is {}", r);
-        return ${service}.list(r);
+        List<${property}${isPojo?string('VO','')}> list = ${service}.list(r);
+        return new JsonResult(HttpCode.OK, list);
     }
 
     /**
@@ -123,6 +132,9 @@ public class ${property}Controller{
     <#if isSwagger>${"\t"}@ApiOperation(value="${property} 分页查询记录接口", notes="${property} 分页查询记录接口")${"\n"}</#if><#t>
     public JsonResult pageList(@RequestBody ${property}${isPojo?string('SearchDTO','')} r){
         logger.info("${property}Controller.pageList param: r is {}", r);
-        return ${service}.pageList(r);
+        PageHelper.startPage(r.getPageNumber(), r.getLineNumber());
+        List<${property}${isPojo?string('VO','')}> list = ${service}.list(r);
+        Page<${property}${isPojo?string('VO','')}> page = new Page<>(list);
+        return new JsonResult(HttpCode.OK, page);
     }
 }

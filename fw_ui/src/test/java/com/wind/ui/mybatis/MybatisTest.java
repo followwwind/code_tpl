@@ -4,7 +4,7 @@ import com.wind.core.model.JdbcProp;
 import com.wind.core.model.db.Table;
 import com.wind.core.util.DbUtil;
 import com.wind.core.util.ftl.FtlObj;
-import com.wind.core.util.ftl.FtlUtil;
+import com.wind.ui.util.FtlUtil;
 import org.junit.Test;
 
 public class MybatisTest {

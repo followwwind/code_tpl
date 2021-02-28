@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wind.boot.dao.UserMapper" >
+    <resultMap id="BaseResultMap" type="com.wind.boot.entity.po.User" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="TINYINT" />
+        <result column="img" property="img" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="TINYINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="del_flag" property="delFlag" jdbcType="TINYINT" />
+    </resultMap>
+
+
+    <sql id="Column_List" >
+        id,username,password,sex,img,email,phone,type,
+			create_time,update_time,del_flag
+    </sql>
+
+    <sql id="Column_Selective_List" >
+        <trim prefix="" suffix="" suffixOverrides="," prefixOverrides=",">
+            <if test="id!= null" >
+                , id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="username!= null and username != ''" >
+                , username = #{username,jdbcType=VARCHAR}
+            </if>
+            <if test="password!= null and password != ''" >
+                , password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="sex!= null" >
+                , sex = #{sex,jdbcType=TINYINT}
+            </if>
+            <if test="img!= null and img != ''" >
+                , img = #{img,jdbcType=VARCHAR}
+            </if>
+            <if test="email!= null" >
+                , email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="phone!= null" >
+                , phone = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="type!= null" >
+                , type = #{type,jdbcType=TINYINT}
+            </if>
+            <if test="createTime!= null" >
+                , create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime!= null" >
+                , update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="delFlag!= null" >
+                , del_flag = #{delFlag,jdbcType=TINYINT}
+            </if>
+        </trim>
+    </sql>
+
+    <sql id="Column_Selective_And_List" >
+        <if test="id!= null" >
+            and id = #{id,jdbcType=BIGINT}
+        </if>
+        <if test="username!= null" >
+            and username = #{username,jdbcType=VARCHAR}
+        </if>
+        <if test="password!= null" >
+            and password = #{password,jdbcType=VARCHAR}
+        </if>
+        <if test="sex!= null" >
+            and sex = #{sex,jdbcType=TINYINT}
+        </if>
+        <if test="img!= null" >
+            and img = #{img,jdbcType=VARCHAR}
+        </if>
+        <if test="email!= null" >
+            and email = #{email,jdbcType=VARCHAR}
+        </if>
+        <if test="phone!= null" >
+            and phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="type!= null" >
+            and type = #{type,jdbcType=TINYINT}
+        </if>
+        <if test="createTime!= null" >
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime!= null" >
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="delFlag!= null" >
+            and del_flag = #{delFlag,jdbcType=TINYINT}
+        </if>
+
+    </sql>
+
+    <sql id="Column_Assign_List" >
+        #{id,jdbcType=BIGINT},#{username,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{sex,jdbcType=TINYINT},#{img,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{type,jdbcType=TINYINT},#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},#{delFlag,jdbcType=TINYINT}
+    </sql>
+
+    <sql id="InsertBatch_List" >
+        #{item.id,jdbcType=BIGINT},#{item.username,jdbcType=VARCHAR},#{item.password,jdbcType=VARCHAR},#{item.sex,jdbcType=TINYINT},#{item.img,jdbcType=VARCHAR},
+		#{item.email,jdbcType=VARCHAR},#{item.phone,jdbcType=VARCHAR},#{item.type,jdbcType=TINYINT},#{item.createTime,jdbcType=TIMESTAMP},
+		#{item.updateTime,jdbcType=TIMESTAMP},#{item.delFlag,jdbcType=TINYINT}
+    </sql>
+
+
+    <insert id="insert" parameterType="com.wind.boot.entity.po.User" >
+        insert into user (
+        <include refid="Column_List" />
+        ) values (
+        <include refid="Column_Assign_List" />
+        )
+    </insert>
+    
+    <!--<insert id="insertBatch" >-->
+        <!--insert into user (-->
+        <!--<include refid="Column_List" />-->
+        <!--) values-->
+        <!--<foreach collection="list" item="item" separator=",">-->
+            <!--(-->
+            <!--<include refid="InsertBatch_List" />-->
+            <!--)-->
+        <!--</foreach>-->
+    <!--</insert>-->
+
+    <delete id="deleteById">
+        delete from user where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="findById" resultType="com.wind.boot.entity.vo.UserVO">
+        select
+        r.id,r.username,r.nickname,r.email,r.password,r.type,r.create_time createTime
+        from user r
+        where r.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="findByName" resultType="com.wind.boot.entity.vo.UserVO">
+        select
+        r.id,r.username,r.password,r.sex,r.img,r.email,r.phone,r.type,
+			r.create_time createTime,r.update_time updateTime,r.del_flag delFlag
+        from user r
+        where r.username = #{username}
+    </select>
+
+    <update id="update" parameterType="com.wind.boot.entity.po.User" >
+        update user
+        <set>
+            <include refid="Column_Selective_List" />
+        </set>
+        <if test="id != null">
+            where id = #{id,jdbcType=BIGINT}
+        </if>
+    </update>
+
+    <select id="list" resultType="com.wind.boot.entity.vo.UserVO" parameterType="com.wind.boot.entity.dto.UserSearchDTO">
+        select
+        r.id,r.username,r.password,r.sex,r.img,r.email,r.phone,r.type,
+        r.create_time createTime,r.update_time updateTime,r.del_flag delFlag
+        from user r
+        where 1 = 1
+        <if test="username!= null and username != ''" >
+            and r.username like concat('%', #{username,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="phone!= null and photo != ''" >
+            and r.photo like concat('%', #{photo,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="email!= null and email != ''" >
+            and r.email like concat('%', #{email,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="type!= null" >
+            and r.type = #{type,jdbcType=TINYINT}
+        </if>
+        order by r.create_time desc
+    </select>
+</mapper>
+

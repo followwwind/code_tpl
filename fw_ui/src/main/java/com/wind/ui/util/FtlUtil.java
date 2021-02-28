@@ -1,14 +1,15 @@
-package com.wind.core.util.ftl;
+package com.wind.ui.util;
 
 import com.wind.core.model.db.Table;
 import com.wind.core.util.BeanUtil;
+import com.wind.core.util.ftl.FtlObj;
+import com.wind.core.util.ftl.FtlParam;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-
 import java.io.*;
-import java.util.HashMap;
+import java.util.stream.Stream;
 
 /**
  * @package com.wind.core.util.ftl
@@ -36,7 +37,7 @@ public class FtlUtil {
             }
             if(sign){
                 Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
-                cfg.setDirectoryForTemplateLoading(new File(freeMarker.getCfgDir()));
+                cfg.setClassForTemplateLoading(FtlUtil.class, "/ftl/");
                 cfg.setDefaultEncoding("UTF-8");
                 cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
                 Template temp = cfg.getTemplate(freeMarker.getCfgName());
@@ -71,5 +72,29 @@ public class FtlUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 清空工作目录
+     */
+    public static void clear(String workPath) {
+        delDir(new File(workPath));
+    }
+
+    /**
+     * 清空目标生成目录
+     */
+    public static void delDir(File dir) {
+        if (dir != null) {
+            if(dir.isDirectory()){
+                File[] files = dir.listFiles();
+                Stream.of(files != null ? files : new File[0]).forEach(d -> {
+                    FtlUtil.delDir(d);
+                    d.delete();
+                });
+            }else{
+                dir.delete();
+            }
+        }
     }
 }

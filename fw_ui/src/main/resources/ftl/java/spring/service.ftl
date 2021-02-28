@@ -8,7 +8,10 @@ package ${bootName + ".service"};
 import ${import};
     </#list>
 </#if>
+import java.util.List;
 <#if isPojo>
+import ${bootName + ".entity.po." + property};
+import ${bootName + ".entity.vo." + property + "VO"};
 import ${bootName + ".entity.dto." + property + "DTO"};
 import ${bootName + ".entity.dto." + property + "SearchDTO"};
 <#else>
@@ -28,7 +31,7 @@ public interface ${property}Service{
      * @param r
      * @return
      */
-    JsonResult save(${property}${isPojo?string('DTO','')} r);
+    int save(${property}${isPojo?string('DTO','')} r);
 
     <#if primary??>
     /**
@@ -36,21 +39,21 @@ public interface ${property}Service{
      * @param id
      * @return
      */
-    JsonResult delete(${primary.classType} id);
+    int delete(${primary.classType} id);
 
     /**
      * 单条记录查询
      * @param id
      * @return
      */
-    JsonResult get(${primary.classType} id);
+    ${property} get(${primary.classType} id);
 
     /**
      * 修改
      * @param r
      * @return
      */
-    JsonResult update(${property}${isPojo?string('DTO','')} r);
+    int update(${property}${isPojo?string('DTO','')} r);
     </#if>
 
     /**
@@ -58,13 +61,5 @@ public interface ${property}Service{
      * @param r
      * @return
      */
-    JsonResult list(${property}${isPojo?string('SearchDTO','')} r);
-
-    /**
-     * 分页查询
-     * @param r
-     * @return
-     */
-    JsonResult pageList(${property}${isPojo?string('SearchDTO','')} r);
-
+    List<${property}${isPojo?string('VO','')}> list(${property}${isPojo?string('SearchDTO','')} r);
 }
