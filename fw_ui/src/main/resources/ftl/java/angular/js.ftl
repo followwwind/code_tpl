@@ -173,7 +173,7 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
 
     $scope.save = function(){
         <#if isRest>
-        var url =  "api/${alias}";
+        var url =  "api/${alias}/";
         if($scope.dialog.isAdd){
             $http.post($scope.serverUrl + url, $scope.form).then(function(response){
                 if(response.data.code == 200){
