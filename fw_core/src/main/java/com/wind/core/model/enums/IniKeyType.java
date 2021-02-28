@@ -28,6 +28,8 @@ public enum IniKeyType {
      */
     WORK_PATH("work", "path"),
     WORK_CLEAR("work", "isClear"),
+    /** isDefault*/
+    WORK_DEFAULT("work", "isDefault"),
     WORK_TPL_PATH("work", "tplPath"),
     ;
 

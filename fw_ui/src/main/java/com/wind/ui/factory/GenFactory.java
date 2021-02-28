@@ -89,16 +89,18 @@ public class GenFactory {
         }
         DbUtil dbUtil = getDbUtil();
         List<Table> tableList = dbUtil.getTables(null);
-        tableList.forEach(t -> {
-            t.addParam(PARAMS);
-            genController(t);
-            genService(t);
-            genMapper(t);
-            genModel(t);
-            genAngularJs(t);
-            genJdbc(t);
-        });
-        genJdbcUtil();
+        if(TRUE.equals(ini.get(IniKeyType.WORK_DEFAULT))){
+            tableList.forEach(t -> {
+                t.addParam(PARAMS);
+                genController(t);
+                genService(t);
+                genMapper(t);
+                genModel(t);
+                genAngularJs(t);
+                genJdbc(t);
+            });
+            genJdbcUtil();
+        }
         genTpl(tableList);
     }
 
@@ -129,7 +131,8 @@ public class GenFactory {
                     freeMarker.setCfgName(name);
                     freeMarker.setData(t);
                     freeMarker.setFileDir(workspace + ftlName);
-                    freeMarker.setFileName(t.getProperty() + prefix + "." + suffix);
+                    String property = "java".equals(suffix) ? t.getProperty() : t.getAlias();
+                    freeMarker.setFileName(property + prefix + "." + suffix);
                     FtlUtil.genCode(freeMarker, true);
                 });
             });
