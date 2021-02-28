@@ -16,6 +16,11 @@ public enum IniKeyType {
     IMPORT("*", "import"),
 
     /**
+     * param
+     */
+    PARAM_EXTEND_POJO("param", "isExtendPojo"),
+
+    /**
      * jdbc
      */
     JDBC_DRIVER("datasource", "driver"),

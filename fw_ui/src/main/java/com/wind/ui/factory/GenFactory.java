@@ -190,7 +190,9 @@ public class GenFactory {
         freeMarker.setCfgName("java/model/po.ftl");
         table.initImport();
         freeMarker.setData(table);
-        table.addImport(ini.getSectionImport("po"));
+        if(TRUE.equals(ini.get(IniKeyType.PARAM_EXTEND_POJO))){
+            table.addImport(ini.getSectionImport("po"));
+        }
         freeMarker.setFileDir(workspace + "entity/po");
         freeMarker.setFileName(table.getProperty() + ".java");
         FtlUtil.genCode(freeMarker, false);
@@ -203,14 +205,18 @@ public class GenFactory {
         FtlUtil.genCode(freeMarker, false);
 
         table.initImport();
-        table.addImport(ini.getSectionImport("dto"));
+        if(TRUE.equals(ini.get(IniKeyType.PARAM_EXTEND_POJO))){
+            table.addImport(ini.getSectionImport("dto"));
+        }
         freeMarker.setCfgName("java/model/dto.ftl");
         freeMarker.setFileName(table.getProperty() + "DTO.java");
         FtlUtil.genCode(freeMarker, false);
 
         table.initImport();
         freeMarker.setFileDir(workspace + "entity/vo");
-        table.addImport(ini.getSectionImport("vo"));
+        if(TRUE.equals(ini.get(IniKeyType.PARAM_EXTEND_POJO))){
+            table.addImport(ini.getSectionImport("vo"));
+        }
         freeMarker.setCfgName("java/model/vo.ftl");
         freeMarker.setFileName(table.getProperty() + "VO.java");
         FtlUtil.genCode(freeMarker, false);

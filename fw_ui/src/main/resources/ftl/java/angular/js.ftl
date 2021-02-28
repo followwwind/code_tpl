@@ -1,5 +1,6 @@
 <#assign isRest = param.isRest!true/>
 <#assign isEnglish = param.isEnglish!false/>
+<#assign formArr = ['createTime', 'updateTime']/>
 'use strict'
 app.controller('${property}Controller', function($scope, $http, $timeout, time, obj, $stateParams) {
     
@@ -11,10 +12,12 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
     
     $scope.form = {
         <#list columnList as column>
+        <#if formArr?seq_contains(column.alias)>
         <#if column_index < (columnList?size - 1)>
         "${column.alias}": '',
         <#else>
         "${column.alias}": ''
+        </#if>
         </#if>
         </#list>
     };
@@ -91,11 +94,13 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
                     }
                 },
                 <#list columnList as column>
+                <#if column.alias != "password">
                 {
                     "render": function(data, type, row){
                         return row.${column.alias};
                     }
                 },
+                </#if>
                 </#list>
                 {
                     "render": function(data, type, row){
@@ -112,7 +117,7 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
         var entity = tbl.row($(e.target).parents("tr")).data();
         $scope.dialog.isAdd = false;
         $scope.dialog.title = '${isEnglish?string('Edit', '修改')}';
-        obj.copy(entity, $scope.form.entity);
+        obj.copy(entity, $scope.form);
         $scope.$apply();
         $("#add").modal("show");
     });

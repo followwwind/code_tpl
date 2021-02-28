@@ -9,6 +9,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
 /**
@@ -47,7 +48,7 @@ public class FtlUtil {
                 cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
                 Template temp = cfg.getTemplate(freeMarker.getCfgName());
                 OutputStream fos = new FileOutputStream( new File(dir, freeMarker.getFileName()));
-                Writer out = new OutputStreamWriter(fos);
+                Writer out = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
                 FtlParam obj = freeMarker.getData();
                 if(obj == null){
                     obj = new FtlParam();
