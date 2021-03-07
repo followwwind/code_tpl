@@ -14,6 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+<#list columnList as column>
+<#if (["updateTime", "createTime"]?seq_contains(column.alias))>
+import java.util.Date;
+</#if>
+</#list>
 import ${bootName + ".util.BeanUtil"};
 import ${bootName + ".dao." + property + "Mapper"};
 import ${bootName + ".service." + property + "Service"};
@@ -48,6 +53,11 @@ public class ${property}ServiceImpl implements ${property}Service{
     	logger.info("${property}ServiceImpl.save param: r is {}", r);
         ${property} entity = new ${property}();
         BeanUtil.copy(r, entity);
+        <#list columnList as column>
+        <#if (["createTime"]?seq_contains(column.alias))>
+        entity.setCreateTime(new Date());
+        </#if>
+        </#list>
         return mapper.insert(entity);
     }
 
@@ -59,7 +69,7 @@ public class ${property}ServiceImpl implements ${property}Service{
     }
 
     @Override
-    public ${property} get(${primary.classType} id) {
+    public ${property}${isPojo?string('VO','')} get(${primary.classType} id) {
     	logger.info("${property}ServiceImpl.get param: id is {}", id);
         return mapper.findById(id);
     }
@@ -69,6 +79,11 @@ public class ${property}ServiceImpl implements ${property}Service{
     	logger.info("${property}ServiceImpl.update param: r is {}", r);
         ${property} entity = new ${property}();
         BeanUtil.copy(r, entity);
+        <#list columnList as column>
+        <#if (["updateTime"]?seq_contains(column.alias))>
+        entity.setUpdateTime(new Date());
+        </#if>
+        </#list>
         return mapper.update(entity);
     }
     </#if>

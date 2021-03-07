@@ -67,11 +67,11 @@
         delete from ${name} where ${primary.name!""} = #${lBracket}id,jdbcType=${replace(primary.type)}}
     </delete>
 
-    <select id="findById" resultMap="BaseResultMap">
+    <select id="findById" ${isPojo?string('resultType="${listReturn}"','resultMap="BaseResultMap"')}>
         select
-        <include refid="Column_List" />
-        from ${name}
-        where ${primary.name!""} = #${lBracket}id,jdbcType=${replace(primary.type)}}
+        ${join(6, ",", 0)}
+        from ${name} r
+        where r.${primary.name!""} = #${lBracket}id,jdbcType=${replace(primary.type)}}
     </select>
 
     <update id="update" parameterType="${typeName}" >
@@ -143,7 +143,12 @@
                 <#local s += "\n\t\t\t">
             </#if>
         <#elseif type == 2>
-            <#local s = "<if test=\"" + column.alias + "!= null\" >\n\t\t\t">
+            <#if column.classType == "String">
+                <#local s = "<if test=\"" + column.alias + "!= null and " + column.alias + "!=''\" >\n\t\t\t">
+            <#else>
+                <#local s = "<if test=\"" + column.alias + "!= null\" >\n\t\t\t">
+            </#if>
+<#--            <#local s = "<if test=\"" + column.alias + "!= null\" >\n\t\t\t">-->
             <#if flag == 1><#local s += "\t"></#if>
             <#local s += sign + " " + column.name + " = #" + lBracket + column.alias
             + ",jdbcType=" + replace(column.type) +"}\n\t\t">

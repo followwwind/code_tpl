@@ -1,6 +1,5 @@
 <#assign isRest = param.isRest!true/>
 <#assign isEnglish = param.isEnglish!false/>
-<#assign formArr = ['createTime', 'updateTime']/>
 'use strict'
 app.controller('${property}Controller', function($scope, $http, $timeout, time, obj, $stateParams) {
     
@@ -12,7 +11,7 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
     
     $scope.form = {
         <#list columnList as column>
-        <#if formArr?seq_contains(column.alias)>
+        <#if !(['createTime', 'updateTime']?seq_contains(column.alias))>
         <#if column_index < (columnList?size - 1)>
         "${column.alias}": '',
         <#else>
@@ -94,7 +93,7 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
                     }
                 },
                 <#list columnList as column>
-                <#if column.alias != "password">
+                <#if !(["password", "id", "uuid"]?seq_contains(column.alias))>
                 {
                     "render": function(data, type, row){
                         return row.${column.alias};
@@ -104,7 +103,8 @@ app.controller('${property}Controller', function($scope, $http, $timeout, time, 
                 </#list>
                 {
                     "render": function(data, type, row){
-                        var html = '<span class="btn btn-info btn-sm" name="edit">${isEnglish?string('Edit', '修改')}</span>';
+                        var html = '';
+                        html += '<span class="btn btn-info btn-sm" name="edit">${isEnglish?string('Edit', '修改')}</span>';
                         html += '<span class="btn btn-danger btn-sm" style="margin-left:3px;" name="del">${isEnglish?string('Del', '删除')}</span>';
                         return html;
                     }

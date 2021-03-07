@@ -89,8 +89,7 @@ public class ${property}Controller{
     <#if isSwagger>${"\t"}@ApiOperation(value="${property} 单条记录查询接口", notes="${property} 单条记录查询接口")${"\n"}</#if><#t>
     public JsonResult get(@PathVariable("id") ${primary.classType} id) {
         logger.info("${property}Controller.get param: id is {}", id);
-        ${property} entity = ${service}.get(id);
-        return new JsonResult(HttpCode.OK, entity);
+        return new JsonResult(HttpCode.OK, ${service}.get(id));
     }
     </#if>
     /**

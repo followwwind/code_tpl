@@ -46,7 +46,7 @@ public interface ${property}Service{
      * @param id
      * @return
      */
-    ${property} get(${primary.classType} id);
+    ${property}${isPojo?string('VO','')} get(${primary.classType} id);
 
     /**
      * 修改

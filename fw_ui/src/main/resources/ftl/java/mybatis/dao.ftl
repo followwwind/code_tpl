@@ -47,7 +47,7 @@ public interface ${property}Mapper {
      * @param id
      * @return
      */
-    ${property} findById(@Param("id") ${primary.classType} id);
+    ${property}${isPojo?string('VO','')} findById(@Param("id") ${primary.classType} id);
 
     /**
      * 修改
