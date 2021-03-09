@@ -13,6 +13,11 @@ public enum DriverType {
      * mysql
      */
     MYSQL("com.mysql.jdbc.Driver"),
+
+    /**
+     * mysql8
+     */
+    MYSQL8("com.mysql.cj.jdbc.Driver"),
     ;
     /**
      * 对应java类型

@@ -29,6 +29,10 @@ public class DbUtil {
 
     private final JdbcProp jdbcProp;
 
+    private final Connection conn;
+
+    private String defaultCatalog;
+
     private final Properties props = new Properties();
 
     public DbUtil(JdbcProp jdbcProp){
@@ -36,6 +40,7 @@ public class DbUtil {
         props.setProperty("useInformationSchema", "true");
         props.setProperty("user", jdbcProp.getUser());
         props.setProperty("password", jdbcProp.getPassword());
+        this.conn = getConn();
     }
 
     /**
@@ -43,12 +48,17 @@ public class DbUtil {
      * @return
      */
     private Connection getConn(){
+        if(this.conn != null){
+            return this.conn;
+        }
         Connection conn = null;
         try {
             Class.forName(jdbcProp.getDriver());
             conn = DriverManager.getConnection(jdbcProp.getJdbcUrl(), props);
+            this.defaultCatalog = conn.getCatalog();
         } catch (ClassNotFoundException | SQLException e) {
             logger.error("DbUtil.getConn failed, err is {}", e.getMessage());
+            throw new BusinessException(e);
         }
         return conn;
     }
@@ -111,7 +121,8 @@ public class DbUtil {
     public List<Table> getTables(String catalog){
         List<Table> tables = new ArrayList<>();
         exec(db -> {
-            ResultSet rs = db.getTables(catalog, null, null, new String[]{"TABLE"});
+            ResultSet rs = db.getTables(StringUtil.isEmpty(catalog) ? defaultCatalog :
+                    catalog, null, null, new String[]{"TABLE"});
             while(rs.next()){
                 Table table = getTable(db, rs);
                 if(table != null) {
@@ -275,6 +286,8 @@ public class DbUtil {
      */
     private String getJavaType(String dbType, String driver){
         if(DriverType.MYSQL.equalType(driver)){
+            return MysqlType.getType(dbType);
+        }else if(DriverType.MYSQL8.equalType(driver)){
             return MysqlType.getType(dbType);
         }
         throw new BusinessException(BusinessCode.THE_DRIVER_NOT_SUPPORT.getDesc());

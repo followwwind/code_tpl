@@ -43,7 +43,7 @@
         ${join(4, ",", 0)}
     </sql>
 
-    <insert id="insert" parameterType="${typeName}" ${primary???string('useGeneratedKeys="true" keyProperty="' + primary.name + '"', '')}>
+    <insert id="insert" parameterType="${typeName}" <#if primary??>useGeneratedKeys="true" keyProperty="${primary.name}"</#if>>
         insert into ${name} (
         <include refid="Column_List" />
         ) values (
