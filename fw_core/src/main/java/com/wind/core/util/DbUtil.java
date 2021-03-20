@@ -37,7 +37,10 @@ public class DbUtil {
 
     public DbUtil(JdbcProp jdbcProp){
         this.jdbcProp = jdbcProp;
+        //useInformationSchema配置为是否使用information_schema获取数据库的metadata
         props.setProperty("useInformationSchema", "true");
+        //处理TINYINT自动转变成BIT
+        props.setProperty("tinyInt1isBit", "false");
         props.setProperty("user", jdbcProp.getUser());
         props.setProperty("password", jdbcProp.getPassword());
         this.conn = getConn();

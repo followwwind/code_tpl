@@ -173,6 +173,7 @@ public class GenFactory {
         FtlObj freeMarker = new FtlObj();
         freeMarker.setCfgName("java/mybatis/dao.ftl");
         freeMarker.setData(table);
+        table.addImport(ini.getSectionImport("dao"));
         freeMarker.setFileDir(workspace + "dao");
         freeMarker.setFileName(table.getProperty() + "Mapper.java");
         FtlUtil.genCode(freeMarker, false);

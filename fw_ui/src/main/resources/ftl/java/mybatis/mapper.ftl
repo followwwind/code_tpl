@@ -5,7 +5,7 @@
 <#assign isPojo = param.isPojo!true/>
 <#assign typeName = (package + "." + isPojo?string('po.', '') + property)/>
 <#assign listReturn = (package + "." + isPojo?string('vo.', '') + property + isPojo?string('VO', ''))/>
-<#assign listParam = (package + "." + isPojo?string('dto.', '') + property + isPojo?string('DTO', ''))/>
+<#assign listParam = (package + "." + isPojo?string('dto.', '') + property + isPojo?string('SearchDTO', ''))/>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="${bootName + ".dao." + property + "Mapper"}" >
@@ -100,7 +100,7 @@
 
 <#function replace columnType>
     <#local b = columnType?replace(" UNSIGNED", "")>
-    <#if b == "INT" || b == "MEDIUMINT">
+    <#if b == "INT" || b == "MEDIUMINT" || b == "TINYINT">
         <#local b = "INTEGER">
     <#elseif b == "TINYTEXT">
         <#local b = "VARCHAR">
