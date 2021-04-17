@@ -1,6 +1,7 @@
 <#assign bootName = param.bootName!"com.wind"/>
 <#assign author = param.author!"wind"/>
 <#assign isExtendPojo = param.isExtendPojo!true/>
+<#assign isFluentValid = param.isFluentValid!true/>
 package ${bootName + ".entity.dto"};
 
 <#if importList??>
@@ -22,13 +23,24 @@ public class ${property}DTO${isExtendPojo?string(' extends BaseDTO', '')} {
 
 <#if columnList??>
     <#list columnList as field>
+    <#if field.javaType != "java.util.Date" || !(['createTime', 'updateTime']?seq_contains(field.alias))>
     <#if field.remarks != "" && field.remarks??>
     /** ${field.remarks}*/
+    </#if>
+    <#if isFluentValid>
+        <#if field.javaType == "java.lang.String">
+    @NotBlank(message = "${field.alias}不能为空", groups = {Add.class})
+        <#elseif field.primary == true>
+    @NotNull(message = "${field.alias}不能为空", groups = Update.class)
+        <#else>
+    @NotNull(message = "${field.alias}不能为空", groups = {Add.class})
+        </#if>
     </#if>
     <#if field.javaType == "java.util.Date">
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="Asia/Shanghai")
     </#if>
     private ${field.classType} ${field.alias};
+    </#if>
 
     </#list>
 </#if>
