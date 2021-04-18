@@ -131,8 +131,9 @@ public class GenFactory {
                     freeMarker.setCfgName(name);
                     freeMarker.setData(t);
                     freeMarker.setFileDir(workspace + ftlName);
-                    String property = "java".equals(suffix) ? t.getProperty() : t.getAlias();
-                    freeMarker.setFileName(property + prefix + "." + suffix);
+                    String property = Character.isUpperCase(suffix.charAt(0)) ? t.getProperty() :
+                            t.getAlias();
+                    freeMarker.setFileName(property + prefix + "." + suffix.toLowerCase());
                     FtlUtil.genCode(freeMarker, true);
                 });
             });

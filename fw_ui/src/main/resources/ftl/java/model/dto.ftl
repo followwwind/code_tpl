@@ -12,6 +12,10 @@ import ${import};
 <#if importList?? && importList?seq_contains("java.util.Date")>
 import com.fasterxml.jackson.annotation.JsonFormat;
 </#if>
+<#if isFluentValid>
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+</#if>
 
 /**
  * ${(remarks=='')?string(name, remarks)} model
@@ -46,6 +50,7 @@ public class ${property}DTO${isExtendPojo?string(' extends BaseDTO', '')} {
 </#if>
 <#if columnList??>
     <#list columnList as field>
+    <#if field.javaType != "java.util.Date" || !(['createTime', 'updateTime']?seq_contains(field.alias))>
     <#if field_index != 0>
 
     </#if>
@@ -56,6 +61,7 @@ public class ${property}DTO${isExtendPojo?string(' extends BaseDTO', '')} {
     public ${field.classType} get${field.property}(){
         return this.${field.alias};
     }
+    </#if>
     </#list>
 </#if>
 }
