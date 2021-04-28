@@ -85,7 +85,7 @@
     </#if>
 
     <delete id="delete" parameterType="${typeName}" >
-        delete from ${name} where
+        delete from ${name} where 1=1
         <include refid="Column_Selective_And_List" />
     </delete>
 

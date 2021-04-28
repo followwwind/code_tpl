@@ -55,7 +55,7 @@ public class ${property}Controller{
     <#else>
     @PostMapping("/save")
     </#if>
-    <#if isSwagger>${"\t"}@ApiOperation(value="${property} 添加记录接口", notes="${property} 添加记录接口")")${"\n"}</#if><#t>
+    <#if isSwagger>${"\t"}@ApiOperation(value="${property} 添加记录接口", notes="${property} 添加记录接口")${"\n"}</#if><#t>
     public JsonResult save(@RequestBody ${property}${isPojo?string('DTO','')} r) {
         logger.info("${property}Controller.save param: r is {}", r);
         int i = ${service}.save(r);
