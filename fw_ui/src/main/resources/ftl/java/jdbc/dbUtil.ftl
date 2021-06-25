@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
  */
 public class DbUtil {
 
-    public final static String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false";
+    public final static String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=UTC";
     public final static String USER = "root";
     public final static String PWD = "123456";
     public final static String DRIVER = "com.mysql.jdbc.Driver";
@@ -124,6 +124,7 @@ public class DbUtil {
             //System.out.println(colMap);
             Arrays.stream(fields).filter(f -> colList.contains(f.getName())).forEach(f -> {
                 String name = f.getName();
+                Class<?> type = f.getType();
                 String colName = colMap.getOrDefault(name, name);
                 try {
                     Object val = rs.getObject(colName);
